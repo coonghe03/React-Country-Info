@@ -56,9 +56,19 @@ const CountryList = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center text-white bg-gradient-to-r from-indigo-600 to-indigo-800 py-4 rounded-lg mb-8">
+        <h1 className="text-4xl font-bold text-center text-white bg-gradient-to-r from-indigo-600 to-indigo-800 py-4 rounded-lg mb-4">
           Explore Countries
         </h1>
+
+        {/* 3D Real World Globe */}
+        <div className="flex justify-center mb-8">
+          <iframe
+            src="https://earth3dmap.com/embed/"
+            title="3D World"
+            className="w-full h-[400px] rounded-lg shadow-md"
+            allowFullScreen
+          ></iframe>
+        </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
           <input

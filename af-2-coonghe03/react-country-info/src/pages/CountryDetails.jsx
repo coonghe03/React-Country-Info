@@ -55,6 +55,8 @@ const CountryDetails = () => {
     );
   }
 
+  const latlng = country.latlng || [0, 0]; // fallback to avoid crash
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-8">
@@ -91,6 +93,17 @@ const CountryDetails = () => {
                   .join(", ")}
               </p>
             </div>
+
+            {/* 🌍 World Map Location */}
+            <div className="w-full h-[400px] mt-10 rounded-lg overflow-hidden shadow-md">
+              <iframe
+                title="Country Location"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${latlng[1] - 5}%2C${latlng[0] - 5}%2C${latlng[1] + 5}%2C${latlng[0] + 5}&layer=mapnik&marker=${latlng[0]}%2C${latlng[1]}`}
+                className="w-full h-full border-none"
+                allowFullScreen
+              ></iframe>
+            </div>
+
             <button
               onClick={() => navigate("/")}
               className="mt-8 px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300"
