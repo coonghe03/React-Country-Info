@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const CountryList = () => {
   const [countries, setCountries] = useState([]);
@@ -7,8 +8,10 @@ const CountryList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [region, setRegion] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
+  const [favorites, setFavorites] = useState([]);
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -51,6 +54,18 @@ const CountryList = () => {
 
   const handleCardClick = (cca3) => {
     navigate(`/country/${cca3}`);
+  };
+
+  const handleAddFavorite = (country) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    const alreadyAdded = favorites.find((fav) => fav.cca3 === country.cca3);
+    if (!alreadyAdded) {
+      setFavorites([...favorites, country]);
+    }
   };
 
   return (
@@ -115,15 +130,18 @@ const CountryList = () => {
                 <div
                   key={country.cca3}
                   className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
-                  onClick={() => handleCardClick(country.cca3)}
                 >
                   <img
                     src={country.flags.svg}
                     alt={`Flag of ${country.name.common}`}
                     className="w-full h-48 object-cover rounded-t-lg"
+                    onClick={() => handleCardClick(country.cca3)}
                   />
                   <div className="p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-3">
+                    <h2
+                      className="text-xl font-semibold text-gray-800 mb-3"
+                      onClick={() => handleCardClick(country.cca3)}
+                    >
                       {country.name.common}
                     </h2>
                     <p className="text-sm text-gray-600 mb-2">
@@ -138,6 +156,14 @@ const CountryList = () => {
                       <span className="font-medium">Population:</span>{" "}
                       {country.population.toLocaleString()}
                     </p>
+                    {user && (
+                      <button
+                        onClick={() => handleAddFavorite(country)}
+                        className="mt-3 text-sm text-indigo-600 hover:underline"
+                      >
+                        ⭐ Add to Favorites
+                      </button>
+                    )}
                   </div>
                 </div>
               ))

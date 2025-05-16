@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const CountryDetails = () => {
   const { cca3 } = useParams();
   const [country, setCountry] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCountryDetails = async () => {
@@ -55,7 +57,7 @@ const CountryDetails = () => {
     );
   }
 
-  const latlng = country.latlng || [0, 0]; // fallback to avoid crash
+  const latlng = country.latlng || [0, 0];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -104,9 +106,23 @@ const CountryDetails = () => {
               ></iframe>
             </div>
 
+            {/* ⭐ Add to Favorites Button */}
+            <button
+              onClick={() => {
+                if (!user) {
+                  navigate("/login");
+                } else {
+                  alert("✅ Added to favorites!");
+                }
+              }}
+              className="mt-6 px-6 py-3 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300"
+            >
+              ⭐ Add to Favorites
+            </button>
+
             <button
               onClick={() => navigate("/")}
-              className="mt-8 px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300"
+              className="mt-6 px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300"
             >
               Back to Countries
             </button>
